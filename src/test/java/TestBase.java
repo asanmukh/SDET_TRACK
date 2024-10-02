@@ -5,17 +5,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import utilities.GlobalPropertiesReader;
+import Utilities.GlobalPropertiesReader;
+import java.lang.reflect.Method;
 
-import java.sql.Driver;
 
 public class TestBase {
 
     public ExtentReports extentReports;
     public ExtentSparkReporter extentSparkReporter;
 
+
     @BeforeMethod
-    public void setUp() {
+    public void setUp(Method m) {
+        extentReports.createTest(m.getName());
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().deleteAllCookies();
