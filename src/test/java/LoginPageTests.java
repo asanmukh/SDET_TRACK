@@ -1,13 +1,12 @@
 import Pages.LoginPage;
-import org.openqa.selenium.WebDriver;
+import Utilities.DriverFactory;
 import org.testng.annotations.Test;
 
 public class LoginPageTests extends TestBase {
 
-    public WebDriver driver;
     @Test
     public void loginTest() {
-        LoginPage loginPage = new LoginPage(driver);
+        LoginPage loginPage = new LoginPage(DriverFactory.getDriver());
         loginPage.testValidLogin();
     }
 }
