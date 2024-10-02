@@ -1,11 +1,10 @@
 package Pages;
 
+import Utilities.DriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import static Locators.LoginPageLocators.*;
 
-import java.sql.Driver;
-import java.time.Duration;
 
 public class LoginPage {
 
@@ -15,12 +14,41 @@ public class LoginPage {
         this.driver = driver;
     }
 
-    public void testValidLogin() {
-        System.out.println("Valid login");
-        // Login to the application
-        String currentUrl = driver.getCurrentUrl();
-        driver.findElement(By.xpath("")).sendKeys();
+    public void testValidLogin(String username, String password) {
+        try {
+            DriverFactory.get().findElement(By.id("nav-link-accountList")).click();
+            DriverFactory.get().findElement(By.id("ap_email")).sendKeys(username);
+            DriverFactory.get().findElement(By.id("continue")).click();
+            DriverFactory.get().findElement(By.id("ap_password")).sendKeys(password);
+            DriverFactory.get().findElement(By.id("signInSubmit")).click();
+            DriverFactory.get().findElement(By.id("twotabsearchtextbox")).isDisplayed();
+        } catch (Exception e) {
+           throw new RuntimeException("Failed to login", e);
+        }
     }
 
+    public void testInvalidEmailLogin(String username) {
+        try {
+            DriverFactory.get().findElement(By.id("nav-link-accountList")).click();
+            DriverFactory.get().findElement(By.id("ap_email")).sendKeys(username);
+            DriverFactory.get().findElement(By.id("continue")).click();
+            DriverFactory.get().findElement(By.id("auth-error-message-box")).isDisplayed();
+        } catch (Exception e) {
+           throw new RuntimeException("User is not able to see the error message", e);
+        }
+    }
 
+    public void testInvalidPasswordLogin(String username, String password) {
+        try {
+            DriverFactory.get().findElement(accountList).click();
+            DriverFactory.get().findElement(By.id("ap_email")).sendKeys(username);
+            DriverFactory.get().findElement(By.id("continue")).click();
+            DriverFactory.get().findElement(By.id("ap_password")).sendKeys(password);
+            DriverFactory.get().findElement(By.id("signInSubmit")).click();
+            DriverFactory.get().findElement(By.id("auth-error-message-box")).isDisplayed();
+        } catch (Exception e) {
+           throw new RuntimeException("User is not able to see the error message", e);
+        }
+    }
 }
+
