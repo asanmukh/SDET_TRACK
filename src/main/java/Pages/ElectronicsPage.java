@@ -18,7 +18,6 @@ public class ElectronicsPage {
 
     public void addItemToCart(String itemName) {
         DriverFactory.get().findElement(By.xpath("//*[@class='a-size-medium a-color-base a-text-normal' and text()='" + itemName + "']")).isDisplayed();
-        DriverFactory.get().findElement(By.xpath("//*[@class='a-size-medium a-color-base a-text-normal' and text()='" + itemName + "']")).click();
         DriverFactory.get().findElement(By.xpath("(//*[text()='" + itemName + "'])[1]/parent::a/parent::h2/parent::div/following-sibling::div/div/div/div/div/div/div/span/div/span/span")).click();
     }
 }
