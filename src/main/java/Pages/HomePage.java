@@ -17,11 +17,12 @@ public class HomePage {
 
     public void searchProduct(String anyProductName){
         DriverFactory.get().findElement(searchButton).isDisplayed();
-        DriverFactory.get().findElement(searchButton).click();
-        DriverFactory.get().findElement(searchButton).sendKeys(anyProductName);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        DriverFactory.get().findElement(By.xpath("//*[@value='" + anyProductName + "']")).isDisplayed();
+        DriverFactory.get().findElement(searchTextBox).click();
+        DriverFactory.get().findElement(searchTextBox).sendKeys(anyProductName);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         DriverFactory.get().findElement(searchSubmitButton).isDisplayed();
+        DriverFactory.get().findElement(searchSubmitButton).click();
+        DriverFactory.get().findElement(By.xpath("(//*[@value='" + anyProductName + "'])[1]")).isDisplayed();
         DriverFactory.get().findElement(searchSubmitButton).submit();
     }
 

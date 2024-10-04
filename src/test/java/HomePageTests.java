@@ -13,7 +13,7 @@ public class HomePageTests extends TestBase{
         HomePage homePage = new HomePage(DriverFactory.get());
         ElectronicsPage electronicsPage = new ElectronicsPage(DriverFactory.get());
         electronicsPage.clickOnElectronics();
-        homePage.searchProduct("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 ");
-        electronicsPage.addItemToCart("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 ");
+        homePage.searchProduct("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
+        electronicsPage.addItemToCart("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
     }
 }

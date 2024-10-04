@@ -5,9 +5,11 @@ import net.sourceforge.tess4j.Tesseract;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 import static Locators.HomePageLocators.*;
 import static Locators.LoginPageLocators.*;
 
@@ -29,27 +31,22 @@ public class LoginPage {
             DriverFactory.get().findElement(signInButton).click();
             Thread.sleep(10000);
             DriverFactory.get().findElement(searchBox).isDisplayed();
-            if(DriverFactory.get().findElement(captchaImage).isDisplayed()){
-
-
+            if (DriverFactory.get().findElement(searchBox).isDisplayed()) {
+                System.out.println("Login successful, search box is displayed.");
+            }
+            List<WebElement> captchaElements = DriverFactory.get().findElements(captchaImage);
+            if (!captchaElements.isEmpty() && captchaElements.get(0).isDisplayed()) {
                 File screenshot = ((TakesScreenshot) DriverFactory.get()).getScreenshotAs(OutputType.FILE);
                 BufferedImage image = ImageIO.read(screenshot);
 
-                // Extract the text from the CAPTCHA image using Tesseract OCR
                 Tesseract tesseract = new Tesseract();
                 String captchaText = tesseract.doOCR(image);
 
-                // Enter the CAPTCHA text into the input field
                 DriverFactory.get().findElement(captchaInputBox).sendKeys(captchaText);
                 DriverFactory.get().findElement(captchaContinueButton).click();
-
-//                String captchaNumber = DriverFactory.get().findElement(captchaImage).getText();
-//                System.out.println(captchaNumber);
-//                DriverFactory.get().findElement(captchaInputBox).sendKeys(captchaNumber);
-//                DriverFactory.get().findElement(captchaContinueButton).click();
             }
         } catch (Exception e) {
-           throw new RuntimeException("Failed to login", e);
+            throw new RuntimeException("Failed to login", e);
         }
     }
 
