@@ -26,4 +26,14 @@ public class HomePageTests extends TestBase{
         shoppingCartPage.clickOnShoppingCart();
         shoppingCartPage.verifyItemsInCart("GoPro Hero12 Waterproof Digital Action Camera with Front&Rear LCD Screens,5.3K60 Ultra Hd Video,Hypersmooth 6.0+Autoboost,Live Streaming with Enduro Battery(1-Yr +1-Yr India Warranty),Black","Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)","Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
     }
+
+    @Test
+    public void testSearchFunctionality() {
+        LoginPage loginPage = new LoginPage(DriverFactory.get());
+        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+//        ElectronicsPage electronicsPage = new ElectronicsPage(DriverFactory.get());
+//        electronicsPage.clickOnElectronics();
+        HomePage homePage = new HomePage(DriverFactory.get());
+        homePage.testSearchAndFilterFunctionality("Samsung");
+    }
 }
