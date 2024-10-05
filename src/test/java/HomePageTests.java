@@ -1,6 +1,7 @@
 import Pages.ElectronicsPage;
 import Pages.HomePage;
 import Pages.LoginPage;
+import Pages.ShoppingCartPage;
 import Utilities.DriverFactory;
 import org.testng.annotations.Test;
 
@@ -19,7 +20,10 @@ public class HomePageTests extends TestBase{
         homePage.searchProduct("Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)");
         electronicsPage.addItemToCart("Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)");
         electronicsPage.clickOnCameras();
-        homePage.searchProduct("Canon EOS R6 Mark II 24.2 MP Mirrorless Camera-Body Only (Black)");
-        electronicsPage.addItemToCart("Canon EOS R6 Mark II 24.2 MP Mirrorless Camera-Body Only (Black)");
+        homePage.searchProduct("GoPro Hero12 Waterproof Digital Action Camera with Front&Rear LCD Screens,5.3K60 Ultra Hd Video,Hypersmooth 6.0+Autoboost,Live Streaming with Enduro Battery(1-Yr +1-Yr India Warranty),Black");
+        electronicsPage.addItemToCart("GoPro Hero12 Waterproof Digital Action Camera with Front&Rear LCD Screens,5.3K60 Ultra Hd Video,Hypersmooth 6.0+Autoboost,Live Streaming with Enduro Battery(1-Yr +1-Yr India Warranty),Black");
+        ShoppingCartPage shoppingCartPage = new ShoppingCartPage(DriverFactory.get());
+        shoppingCartPage.clickOnShoppingCart();
+        shoppingCartPage.verifyItemsInCart("GoPro Hero12 Waterproof Digital Action Camera with Front&Rear LCD Screens,5.3K60 Ultra Hd Video,Hypersmooth 6.0+Autoboost,Live Streaming with Enduro Battery(1-Yr +1-Yr India Warranty),Black","Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)","Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
     }
 }
