@@ -3,6 +3,8 @@ package Pages;
 import Utilities.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import java.time.Duration;
+
 import static Locators.ElectronicsPageLocators.*;
 
 public class ElectronicsPage {
@@ -27,6 +29,7 @@ public class ElectronicsPage {
 
     public void addItemToCart(String itemName) {
         DriverFactory.get().findElement(By.xpath("//*[@class='a-size-medium a-color-base a-text-normal' and text()='" + itemName + "']")).isDisplayed();
+        DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         DriverFactory.get().findElement(By.xpath("(//*[text()='" + itemName + "'])[1]/parent::a/parent::h2/parent::div/following-sibling::div/div/div/div/div/div/div/span/div/span/span")).click();
     }
 
