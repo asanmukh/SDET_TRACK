@@ -75,10 +75,11 @@ public class HomePage {
         eighthItemFromBestSeller.click();
         DriverFactory.get().findElement(eighthItemTitle).isDisplayed();
         DriverFactory.get().findElement(addItemToCartButton).click();
+        DriverFactory.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         try {
             WebElement skipButton = DriverFactory.get().findElement(skipButtonToSkipAddOnOrder);
             if (skipButton.isDisplayed()) {
-                skipButton.click();
+                actions.moveToElement(skipButton).click().perform();
             }
         } catch (NoSuchElementException e) {
             System.out.println("Skip button not found");
@@ -88,5 +89,10 @@ public class HomePage {
         String cartItemName = DriverFactory.get().findElement(cartItemsList).getText().trim();
         System.out.println(cartItemName);
         Assert.assertEquals(selectedItemNameFromBestSellers, cartItemName);
+//        DriverFactory.get().findElement(deleteItemFromCart).click();
+        WebElement deleteItemButton = DriverFactory.get().findElement(deleteItemFromCart);
+        DriverFactory.get().findElement((By) deleteItemButton).isDisplayed();
+        actions.moveToElement(deleteItemButton).click().perform();
+        Assert.assertTrue(DriverFactory.get().findElement(itemDeletedSuccessMessage).isDisplayed());
     }
 }

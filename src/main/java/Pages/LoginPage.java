@@ -2,18 +2,16 @@ package Pages;
 
 import Utilities.DriverFactory;
 import net.sourceforge.tess4j.Tesseract;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-import static Locators.HomePageLocators.*;
-import static Locators.LoginPageLocators.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import net.sourceforge.tess4j.*;
+import java.io.File;
+import java.time.Duration;
+import java.util.List;
+import static Locators.HomePageLocators.searchBox;
+import static Locators.LoginPageLocators.*;
 
 public class LoginPage {
 
@@ -25,37 +23,28 @@ public class LoginPage {
 
     public void testValidLogin(String username, String password) {
         try {
-            System.setProperty("jna.library.path", "/Users/asanmukh/Downloads/Tess4J/dist");
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            Map<String, String> environment = processBuilder.environment();
-            environment.put("TESSDATA_PREFIX", "/Users/asanmukh/Downloads/Tess4J/dist");
-
-            System.out.println("Tesseracts path: " + System.getProperty("jna.library.path"));
             DriverFactory.get().findElement(accountList).click();
             DriverFactory.get().findElement(email).sendKeys(username);
             DriverFactory.get().findElement(continueButton).click();
             DriverFactory.get().findElement(passwordLocator).sendKeys(password);
             DriverFactory.get().findElement(signInButton).click();
-            Thread.sleep(10000);
+
+            // Wait for the page to load
+            WebDriverWait wait = new WebDriverWait(DriverFactory.get(), Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(searchBox));
+
             // Check if the captcha is displayed
             List<WebElement> captchaElements = DriverFactory.get().findElements(captchaImage);
             if (!captchaElements.isEmpty() && DriverFactory.get().findElement(captchaImage).isDisplayed()) {
                 System.out.println("Captcha found, solving...");
-
-                // Solve the captcha
-                File screenshot = ((TakesScreenshot) DriverFactory.get()).getScreenshotAs(OutputType.FILE);
-                BufferedImage image = ImageIO.read(screenshot);
-
-                Tesseract tesseract = new Tesseract();
-                tesseract.setDatapath("/Users/asanmukh/Downloads/Tess4J/dist");
-                tesseract.setLanguage("eng");
-                String captchaText = tesseract.doOCR(image);
-
+                File captchaScreenshot = ((TakesScreenshot) DriverFactory.get()).getScreenshotAs(OutputType.FILE);
+                String captchaText = solveCaptcha(captchaScreenshot);
                 DriverFactory.get().findElement(captchaInputBox).sendKeys(captchaText);
                 DriverFactory.get().findElement(captchaContinueButton).click();
 
                 // Wait for the captcha to be solved and the page to load
-                Thread.sleep(5000);
+                wait = new WebDriverWait(DriverFactory.get(), Duration.ofSeconds(5));
+                wait.until(ExpectedConditions.visibilityOfElementLocated(searchBox));
             }
 
             // Check if the login is successful (search box is displayed)
@@ -68,6 +57,22 @@ public class LoginPage {
             System.out.println("Error message: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Failed to login", e);
+        }
+    }
+
+    public String solveCaptcha(File captchaScreenshot) {
+        try {
+            // Solve the CAPTCHA using Tesseracts
+            ITesseract tesseract = new Tesseract();
+            tesseract.setDatapath("/opt/homebrew/opt/tesseract/share/tessdata");
+            tesseract.setLanguage("eng");
+            // Perform OCR on the captcha screenshot
+            String captchaText = tesseract.doOCR(captchaScreenshot);
+            return captchaText;
+        } catch (Exception e) {
+            System.out.println("Error message: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to solve captcha", e);
         }
     }
 
@@ -89,9 +94,25 @@ public class LoginPage {
             DriverFactory.get().findElement(continueButton).click();
             DriverFactory.get().findElement(passwordLocator).sendKeys(password);
             DriverFactory.get().findElement(signInButton).click();
-            DriverFactory.get().findElement(authenticationErrorMessage).isDisplayed();
+
+            // Check if the authentication error message is displayed
+            try {
+                DriverFactory.get().findElement(authenticationErrorMessage).isDisplayed();
+            } catch (NoSuchElementException e) {
+                // If the error message is not displayed, check if the captcha is displayed
+                List<WebElement> captchaElements = DriverFactory.get().findElements(captchaImage);
+                if (!captchaElements.isEmpty() && DriverFactory.get().findElement(captchaImage).isDisplayed()) {
+                    System.out.println("Captcha found, solving...");
+                    File captchaScreenshot = ((TakesScreenshot) DriverFactory.get()).getScreenshotAs(OutputType.FILE);
+                    String captchaText = solveCaptcha(captchaScreenshot);
+                    DriverFactory.get().findElement(captchaInputBox).sendKeys(captchaText);
+                    DriverFactory.get().findElement(captchaContinueButton).click();
+                } else {
+                    throw new RuntimeException("User is not able to see the error message or captcha", e);
+                }
+            }
         } catch (Exception e) {
-           throw new RuntimeException("User is not able to see the error message", e);
+            throw new RuntimeException("User is not able to see the error message", e);
         }
     }
 
