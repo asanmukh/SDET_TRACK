@@ -1,7 +1,4 @@
-import Pages.ElectronicsPage;
-import Pages.HomePage;
-import Pages.LoginPage;
-import Pages.ShoppingCartPage;
+import Pages.*;
 import Utilities.DriverFactory;
 import org.testng.annotations.Test;
 
@@ -33,7 +30,10 @@ public class HomePageTests extends TestBase{
         loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
 //        ElectronicsPage electronicsPage = new ElectronicsPage(DriverFactory.get());
 //        electronicsPage.clickOnElectronics();
-        HomePage homePage = new HomePage(DriverFactory.get());
-        homePage.testSearchAndFilterFunctionality("Samsung");
+//        HomePage homePage = new HomePage(DriverFactory.get());
+//        homePage.testSearchAndFilterFunctionality("Samsung");
+        AccountProfilePage accountProfilePage = new AccountProfilePage(DriverFactory.get());
+        accountProfilePage.addNewAddress("KARNATAKA");
+        accountProfilePage.deleteAddress();
     }
 }
