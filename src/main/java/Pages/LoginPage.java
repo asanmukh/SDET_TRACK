@@ -1,6 +1,7 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.WebActions;
 import net.sourceforge.tess4j.Tesseract;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -17,8 +18,11 @@ public class LoginPage {
 
     public WebDriver driver;
 
+    private WebActions act;
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
+        this.act = new WebActions(driver);
     }
 
     public void testValidLogin(String username, String password) {
