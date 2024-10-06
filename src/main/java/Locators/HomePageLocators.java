@@ -19,7 +19,7 @@ public interface HomePageLocators {
 
     By eighthItemFromBagsBestSellers = By.xpath("//*[@class='a-carousel-heading a-inline-block' and contains(text(),'Bestsellers in Bags, Wallets and Luggage')]/parent::div/parent::div/following-sibling::div//li[4]/div//span/div");
 
-    By eighthItemTitle = By.xpath("//*[@id='productTitle' and contains(text(),'American Tourister Liftoff 79 Cms Large Check-in Polypropylene Hard Sided Double Spinner 4 Wheel Luggage')]");
+    By eighthItemTitle = By.xpath("//*[@id='productTitle' and contains(text(),'American Tourister Liftoff')]");
 
     By addItemToCartButton = By.xpath("//*[@title='Add to Shopping Cart']");
 
