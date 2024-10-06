@@ -2,7 +2,7 @@ import Pages.ShoppingCartPage;
 import Utilities.DriverFactory;
 import org.testng.annotations.Test;
 
-public class ShoppingCartPageTests {
+public class ShoppingCartPageTests extends TestBase {
 
     @Test
     public void clickOnShoppingCart() {
