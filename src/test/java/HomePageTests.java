@@ -36,4 +36,11 @@ public class HomePageTests extends TestBase{
         accountProfilePage.addNewAddress("KARNATAKA");
         accountProfilePage.deleteAddress();
     }
+
+    @Test
+    public void testLogoutFunctionality() {
+        LoginPage loginPage = new LoginPage(DriverFactory.get());
+        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testLogOutFunctionality();
+    }
 }

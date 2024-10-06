@@ -17,4 +17,6 @@ public interface LoginPageLocators {
 
     By captchaContinueButton = By.xpath("//*[@name='cvf_captcha_captcha_action']");
 
+    By logOutButton = By.xpath("//a[@id='nav-item-signout']");
+
 }

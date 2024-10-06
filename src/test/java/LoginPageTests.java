@@ -21,4 +21,10 @@ public class LoginPageTests extends TestBase {
         LoginPage loginPage = new LoginPage(DriverFactory.get());
         loginPage.testInvalidPasswordLogin("akashms4all@gmail.com","password123");
     }
+
+    @Test
+    public void logOutTest() {
+        LoginPage loginPage = new LoginPage(DriverFactory.get());
+        loginPage.testLogOutFunctionality();
+    }
 }
