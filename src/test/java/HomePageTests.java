@@ -43,4 +43,12 @@ public class HomePageTests extends TestBase{
         loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
         loginPage.testLogOutFunctionality();
     }
+
+    @Test
+    public void testAddItemFromBestSellersSectionToCart() {
+        LoginPage loginPage = new LoginPage(DriverFactory.get());
+        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        HomePage homePage = new HomePage(DriverFactory.get());
+        homePage.addItemFromBestsellersAndVerifyInCart();
+    }
 }
