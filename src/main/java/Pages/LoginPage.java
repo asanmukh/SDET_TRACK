@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import static Locators.HomePageLocators.*;
 import static Locators.LoginPageLocators.*;
+import org.openqa.selenium.interactions.Actions;
 
 public class LoginPage {
 
@@ -91,6 +92,19 @@ public class LoginPage {
             DriverFactory.get().findElement(authenticationErrorMessage).isDisplayed();
         } catch (Exception e) {
            throw new RuntimeException("User is not able to see the error message", e);
+        }
+    }
+
+    public void testLogOutFunctionality() {
+        try {
+            WebElement accountListElement = DriverFactory.get().findElement(accountList);
+            Actions actions = new Actions(driver);
+            actions.moveToElement(accountListElement).perform();
+            DriverFactory.get().findElement(logOutButton).isDisplayed();
+            DriverFactory.get().findElement(logOutButton).click();
+            DriverFactory.get().findElement(email).isDisplayed();
+        } catch (Exception e) {
+            throw new RuntimeException("User is not able to see the error message", e);
         }
     }
 }
