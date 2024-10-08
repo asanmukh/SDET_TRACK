@@ -19,7 +19,7 @@ public class LoginPageTests extends TestBase {
     @Test
     public void invalidPasswordLoginTest() {
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testInvalidPasswordLogin("akashms4all@gmail.com","password123");
+        loginPage.testInvalidPasswordLogin("akashms4all@gmail.com","Aki@1616");
     }
 
     @Test
