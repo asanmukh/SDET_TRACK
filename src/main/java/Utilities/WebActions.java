@@ -1,19 +1,21 @@
 package Utilities;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import static java.rmi.server.LogStream.log;
 
 public class WebActions {
 
-    private WebDriverWait wait;
-    private WebDriver driver;
-
-    private int maxRetryCount = 3;
+    private final WebDriverWait wait;
+    private final WebDriver driver;
+    private final int maxRetryCount = 3;
+    private JavascriptExecutor js;
 
     public WebActions(WebDriver driver) {
         this.driver = driver;
@@ -24,10 +26,66 @@ public class WebActions {
         int retryCount = 0;
         while (retryCount < maxRetryCount) {
             try {
-                wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
-                break;
+                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                if (element.isEnabled() && element.isDisplayed()) {
+                    if (element.isDisplayed() && element.isEnabled()) {
+                        element.click();
+                        break;
+                    } else {
+                        throw new ElementNotInteractableException("Element is not visible or interactable");
+                    }
+                } else {
+                    throw new ElementNotInteractableException("Element is not visible or interactable");
+                }
             } catch (Exception e) {
                 retryCount++;
+                if (retryCount == maxRetryCount) {
+                    throw new RuntimeException("Unable to click on element with locator: " + locator, e);
+                }
+            }
+        }
+    }
+
+    public void doJSClick(By element, String... msg) {
+        int retryCnt = 0;
+        Exception ex = null;
+        if (msg.length > 0)
+            System.out.println(log(msg[0]));
+        while (true) {
+            if (retryCnt > maxRetryCount)
+                throw new RuntimeException("Unable to click the element with locator: " + element, ex);
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(element));
+                js.executeScript("arguments[0].click();", driver.findElement(element));
+                System.out.println("Clicked on the element with locator: " + element);
+                break;
+            } catch (Exception e) {
+                ex = e;
+                retryCnt++;
+            }
+        }
+    }
+
+    public void doActionsClick(By locator, String... msg) {
+        int retryCnt = 0;
+        Exception ex = null;
+        if (msg.length > 0)
+            System.out.println(log(msg[0]));
+        Actions acts = new Actions(driver);
+        while (true) {
+            if (retryCnt > maxRetryCount)
+                throw new RuntimeException("Unable to perform mouse hover and click on web element with locator: " + locator, ex);
+            try {
+                WebElement element = driver.findElement(locator);
+                if (element.isDisplayed() && element.isEnabled()) {
+                    acts.moveToElement(element).click().build().perform();
+                    break;
+                } else {
+                    throw new NoSuchElementException("Element not visible or interactable");
+                }
+            } catch (Exception e) {
+                ex = e;
+                retryCnt++;
             }
         }
     }
@@ -87,5 +145,10 @@ public class WebActions {
 
     public String getTitle() {
         return driver.getTitle();
+    }
+
+    public void doMoveHoverToElement(By element) {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(driver.findElement(element)).perform();
     }
 }
