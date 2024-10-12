@@ -1,16 +1,13 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.WebActions;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.junit.Assert;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.interactions.Actions;
-
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static Locators.LoginPageLocators.*;
 import static Locators.accountProfilePageLocators.*;
@@ -18,53 +15,40 @@ import static Locators.accountProfilePageLocators.*;
 public class AccountProfilePage {
 
     public WebDriver driver;
-
+    private final WebActions act;
     public AccountProfilePage(WebDriver driver) {
         this.driver = driver;
+        this.act = new WebActions(driver);
     }
 
     public void addNewAddress(String chooseState) {
-        DriverFactory.get().findElement(accountList).click();
-        DriverFactory.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        DriverFactory.get().findElement(manageAddresses).isDisplayed();
-        DriverFactory.get().findElement(manageAddresses).click();
-        DriverFactory.get().findElement(addNewAddressButton).click();
-        DriverFactory.get().findElement(addANewAddressPage).isDisplayed();
-        DriverFactory.get().findElement(fullName).sendKeys("Akash Test");
-        DriverFactory.get().findElement(mobileNumber).sendKeys("8888888888");
-        DriverFactory.get().findElement(pinCode).sendKeys("560040");
-        DriverFactory.get().findElement(addressLine1).sendKeys("1st A main road Govindraj nagar green building");
-        DriverFactory.get().findElement(addressLine2).sendKeys("near mallige idly factory ");
-        DriverFactory.get().findElement(landmark).sendKeys("Near Apollo Hospital");
-//        DriverFactory.get().findElement(city).sendKeys("Bangalore");
-        DriverFactory.get().findElement(state).click();
-        DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]")).click();
-        DriverFactory.get().findElement(changeFocus).click();
-
-        WebElement element = DriverFactory.get().findElement(addAddressButton);
-        Actions actions = new Actions(driver);
-        actions.moveToElement(element).click().perform();
-
-//        DriverFactory.get().findElement(addAddressButton).click();
-        DriverFactory.get().findElement(addAddressSuccessMessage).isDisplayed();
-        Assert.assertTrue(DriverFactory.get().findElement(verifyNewAddressFromYourAddress).isDisplayed());
+        act.doClick(accountList);
+        act.checkElementIsDisplayed(manageAddresses);
+        act.doClick(manageAddresses);
+        act.doClick(addNewAddressButton);
+        act.checkElementIsDisplayed(addANewAddressPage);
+        act.doEnterText(fullName, "Akash Test");
+        act.doEnterText(mobileNumber, "8888888888");
+        act.doEnterText(pinCode, "560040");
+        act.doEnterText(addressLine1, "1st A main road Govindraj nagar green building");
+        act.doEnterText(addressLine2, "near mallige idly factory ");
+        act.doEnterText(landmark, "Near Apollo Hospital");
+        act.doClick(state);
+        WebElement stateName = DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
+        act.doClick(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
+        act.doClick(changeFocus);
+        act.doActionsClick(addAddressButton);
+        act.checkElementIsDisplayed(addAddressSuccessMessage);
+        Assert.assertTrue(act.checkElementIsDisplayed(verifyNewAddressFromYourAddress));
     }
 
     public void deleteAddress() {
-       DriverFactory.get().findElement(deleteAddedAddress).isDisplayed();
-       DriverFactory.get().findElement(deleteAddedAddress).click();
-       DriverFactory.get().findElement(deleteAddressModalConfirmYesButton).isDisplayed();
-
-       DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-//       WebElement element = DriverFactory.get().findElement(deleteAddressModalConfirmYesButton);
-//       Actions actions = new Actions(driver);
-//       actions.moveToElement(element).click().perform();
-
-        WebElement element = DriverFactory.get().findElement(deleteAddressModalConfirmYesButton);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].click();", element);
-
-//       DriverFactory.get().findElement(deleteAddressModalConfirmYesButton).click();
-       Assert.assertTrue(DriverFactory.get().findElement(addressDeletedSuccessMessage).isDisplayed());
+        act.checkElementIsDisplayed(deleteAddedAddress);
+        act.doClick(deleteAddedAddress);
+        act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
+        act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
+        DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        DriverFactory.get().findElement(deleteAddressModalConfirmYesButton).click();
+        Assert.assertTrue(act.checkElementIsDisplayed(addressDeletedSuccessMessage));
     }
 }

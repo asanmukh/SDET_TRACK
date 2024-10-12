@@ -1,48 +1,47 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.WebActions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
 import static Locators.ElectronicsPageLocators.*;
 import static Locators.HomePageLocators.*;
 import static Locators.ShoppingCartPageLocators.*;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
 public class HomePage {
 
     public WebDriver driver;
+    private final WebActions act;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        this.act = new WebActions(driver);
     }
 
-    public void searchProduct(String anyProductName){
-        DriverFactory.get().findElement(searchButton).isDisplayed();
-        DriverFactory.get().findElement(searchTextBox).click();
-        DriverFactory.get().findElement(searchTextBox).sendKeys(anyProductName);
-        DriverFactory.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        DriverFactory.get().findElement(searchSubmitButton).isDisplayed();
-        DriverFactory.get().findElement(searchSubmitButton).click();
-        DriverFactory.get().findElement(By.xpath("(//*[@value='" + anyProductName + "'])[1]")).isDisplayed();
-        DriverFactory.get().findElement(searchSubmitButton).submit();
+    public void searchProduct(String anyProductName) {
+        act.checkElementIsDisplayed(searchButton);
+        act.doEnterText(searchTextBox, anyProductName);
+        act.checkElementIsDisplayed(searchSubmitButton);
+        act.doClick(searchSubmitButton);
+        act.checkElementIsDisplayed(By.xpath("(//*[@value='" + anyProductName + "'])[1]"));
+        act.doClick(searchSubmitButton);
     }
 
     public void testSearchAndFilterFunctionality(String samsung) {
-        DriverFactory.get().findElement(searchTextBox).sendKeys("Samsung");
-        DriverFactory.get().findElement(searchSubmitButton).click();
-        DriverFactory.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        Assert.assertTrue(DriverFactory.get().getTitle().contains("Samsung"));
+        act.checkElementIsDisplayed(searchTextBox);
+        act.doEnterText(searchTextBox, samsung);
+        act.checkElementIsDisplayed(searchSubmitButton);
+        act.doClick(searchSubmitButton);
+        Assert.assertTrue(act.getTitle().contains("Samsung"));
         WebElement brandFilter = DriverFactory.get().findElement(filterBySamsungCheckbox);
         brandFilter.click();
-        DriverFactory.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        List<WebElement> itemTitles = DriverFactory.get().findElements(itemsDisplayedAfterBrandFilter);
+        List<WebElement> itemTitles = act.getListOfWebElements(itemsDisplayedAfterBrandFilter);
         System.out.println("Number of item titles listed after brand filter is selected to Samsung: " + itemTitles.size());
         for (WebElement title : itemTitles) {
             String itemTitle = title.getText().toLowerCase();
@@ -52,47 +51,33 @@ public class HomePage {
     }
 
     public void addItemFromBestsellersAndVerifyInCart() {
-        DriverFactory.get().findElement(openAllCategoriesMenu).click();
-        DriverFactory.get().findElement(bestSellers).click();
-        DriverFactory.get().findElement(bestSellersInBagsWalletsAndLuggage).isDisplayed();
-        DriverFactory.get().findElement(bestSellersNextPageButton).isDisplayed();
-//        DriverFactory.get().findElement(bestSellersNextPageButton).click();
-
-        WebElement nextPageButton = DriverFactory.get().findElement(bestSellersNextPageButton);
-        Actions actions = new Actions(driver);
-        actions.moveToElement(nextPageButton).click().perform();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        WebElement eighthItem = wait.until(ExpectedConditions.elementToBeClickable(eighthItemFromBagsBestSellers));
-        eighthItem.click();
-
-//        DriverFactory.get().manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-//        DriverFactory.get().findElement(eighthItemFromBagsBestSellers).isDisplayed();
-//        DriverFactory.get().findElement(eighthItemFromBagsBestSellers).click();
+        act.doClick(openAllCategoriesMenu);
+        act.doClick(bestSellers);
+        act.checkElementIsDisplayed(bestSellersInBagsWalletsAndLuggage);
+        act.checkElementIsDisplayed(bestSellersNextPageButton);
+        act.doClick(bestSellersNextPageButton);
+        act.doActionsClick(bestSellersNextPageButton);
+        act.doActionsClick(eighthItemFromBagsBestSellers);
         WebElement eighthItemFromBestSeller = DriverFactory.get().findElement(eighthItemTitle);
         String selectedItemNameFromBestSellers = eighthItemFromBestSeller.getText().trim();
         System.out.println(selectedItemNameFromBestSellers);
         eighthItemFromBestSeller.click();
-        DriverFactory.get().findElement(eighthItemTitle).isDisplayed();
-        DriverFactory.get().findElement(addItemToCartButton).click();
-        DriverFactory.get().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        act.checkElementIsDisplayed(eighthItemTitle);
+        act.doClick(addItemToCartButton);
         try {
-            WebElement skipButton = DriverFactory.get().findElement(skipButtonToSkipAddOnOrder);
-            if (skipButton.isDisplayed()) {
-                actions.moveToElement(skipButton).click().perform();
+            if (act.checkElementIsDisplayed(skipButtonToSkipAddOnOrder)) {
+                act.doActionsClick(skipButtonToSkipAddOnOrder);
             }
         } catch (NoSuchElementException e) {
-            System.out.println("Skip button not found");
+            System.out.println("Skip button to skip an add-on order is not found");
         }
-        Assert.assertTrue(DriverFactory.get().findElement(addedToCartSuccessMessage).isDisplayed());
-        DriverFactory.get().findElement(shoppingCart).click();
+        Assert.assertTrue(act.checkElementIsDisplayed(addedToCartSuccessMessage));
+        act.doJSClick(shoppingCart);
         String cartItemName = DriverFactory.get().findElement(cartItemsList).getText().trim();
         System.out.println(cartItemName);
         Assert.assertEquals(selectedItemNameFromBestSellers, cartItemName);
-//        DriverFactory.get().findElement(deleteItemFromCart).click();
-        WebElement deleteItemButton = DriverFactory.get().findElement(deleteItemFromCart);
-        DriverFactory.get().findElement((By) deleteItemButton).isDisplayed();
-        actions.moveToElement(deleteItemButton).click().perform();
-        Assert.assertTrue(DriverFactory.get().findElement(itemDeletedSuccessMessage).isDisplayed());
+        act.doClick(deleteItemFromCart);
+        act.doActionsClick(deleteItemFromCart);
+        Assert.assertTrue(act.checkElementIsDisplayed(itemDeletedSuccessMessage));
     }
 }

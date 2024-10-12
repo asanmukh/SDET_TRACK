@@ -151,4 +151,17 @@ public class WebActions {
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(element)).perform();
     }
+
+    public void refreshPage() {
+        driver.navigate().refresh();
+    }
+
+    public void waitForElementToBeInvisible(WebElement element) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.invisibilityOf(element));
+        } catch (TimeoutException e) {
+            System.out.println("Element is still visible after waiting for 10 seconds");
+        }
+    }
 }
