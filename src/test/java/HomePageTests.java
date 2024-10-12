@@ -22,6 +22,7 @@ public class HomePageTests extends TestBase {
         ShoppingCartPage shoppingCartPage = new ShoppingCartPage(DriverFactory.get());
         shoppingCartPage.clickOnShoppingCart();
         shoppingCartPage.verifyItemsInCart("Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital", "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)", "Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
+        shoppingCartPage.deleteAddedItemsFromCart();
     }
 
     @Test

@@ -21,7 +21,6 @@ public class LoginPage {
 
     public WebDriver driver;
     private final WebActions act;
-
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.act = new WebActions(driver);
