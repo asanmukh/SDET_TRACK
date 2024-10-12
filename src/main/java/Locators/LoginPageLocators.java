@@ -10,13 +10,9 @@ public interface LoginPageLocators {
     By signInButton = By.id("signInSubmit");
     By continueButton = By.id("continue");
     By authenticationErrorMessage = By.id("auth-error-message-box");
-
     By captchaImage = By.xpath("//img[@alt='captcha']");
-
     By captchaInputBox = By.xpath("//*[@name='cvf_captcha_input']");
-
     By captchaContinueButton = By.xpath("//*[@name='cvf_captcha_captcha_action']");
-
     By logOutButton = By.xpath("//a[@id='nav-item-signout']");
 
 }
