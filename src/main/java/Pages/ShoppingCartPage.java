@@ -3,6 +3,7 @@ package Pages;
 import Utilities.DriverFactory;
 import Utilities.WebActions;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -55,8 +56,10 @@ public class ShoppingCartPage {
         DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         for (int i = 0; i < cartItems.size(); i++) {
             try {
-                WebElement deleteButton = driver.findElement(deleteAllItemsFromCart);
+                WebElement deleteButton = driver.findElement(By.xpath("(//*[@data-feature-id='delete']/span/input[@data-action='delete'])[" + (i + 1) + "]"));
+                Thread.sleep(3000);
                 deleteButton.click();
+                Thread.sleep(3000);
             } catch (Exception e) {
                 System.out.println("Error clicking on delete button: " + e.getMessage());
             }

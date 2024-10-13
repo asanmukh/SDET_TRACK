@@ -6,12 +6,19 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Objects;
@@ -38,21 +45,45 @@ public class TestBase {
     @BeforeMethod
     public void setUp(Method m) {
         ExtentFactory.set(extentReports.createTest(m.getName()));
-        DriverFactory.set(new ChromeDriver());
-        DriverFactory.get().manage().window().maximize();
-        DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        DriverFactory.get().manage().deleteAllCookies();
-        DriverFactory.get().get(GlobalPropertiesReader.getPropertyValue("url"));
         String browser_name = Objects.requireNonNull(GlobalPropertiesReader.getPropertyValue("browser"),"Browser name is not set, please set the browser name in global.properties");
-        if (DriverFactory.get() == null) {
-            switch (browser_name.toLowerCase()) {
-                case "chrome", "firefox", "edge":
-                    DriverFactory.get().get(GlobalPropertiesReader.getPropertyValue("url"));
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid browser name: " + browser_name);
-            }
+        String headless = GlobalPropertiesReader.getPropertyValue("headless");
+        WebDriver driver = null;
+        switch (browser_name.toLowerCase()) {
+            case "chrome":
+                ChromeOptions chromeOptions = new ChromeOptions();
+                if ("yes".equalsIgnoreCase(headless)) {
+                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("--disable-gpu");
+                    chromeOptions.addArguments("--window-size=1920,1080");
+                }
+                driver = new ChromeDriver(chromeOptions);
+                break;
+            case "firefox":
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                if ("yes".equalsIgnoreCase(headless)) {
+                    firefoxOptions.addArguments("--headless");
+                    firefoxOptions.addArguments("--disable-gpu");
+                    firefoxOptions.addArguments("--window-size=1920,1080");
+                }
+                driver = new FirefoxDriver(firefoxOptions);
+                break;
+            case "edge":
+                EdgeOptions edgeOptions = new EdgeOptions();
+                if ("yes".equalsIgnoreCase(headless)) {
+                    edgeOptions.addArguments("--headless");
+                    edgeOptions.addArguments("--disable-gpu");
+                    edgeOptions.addArguments("--window-size=1920,1080");
+                }
+                driver = new EdgeDriver(edgeOptions);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid browser name: " + browser_name);
         }
+            DriverFactory.set(driver);
+            DriverFactory.get().manage().window().maximize();
+            DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            DriverFactory.get().manage().deleteAllCookies();
+            DriverFactory.get().get(GlobalPropertiesReader.getPropertyValue("url"));
     }
 
     @AfterMethod
@@ -62,7 +93,7 @@ public class TestBase {
            ExtentFactory.get().fail(result.getThrowable());
            ExtentFactory.get().fail("screenshot", MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot).build());
        }
-       DriverFactory.get().quit();
+//       DriverFactory.get().quit();
     }
 
     @AfterSuite

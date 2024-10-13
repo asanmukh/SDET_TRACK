@@ -3,10 +3,7 @@ package Pages;
 import Utilities.DriverFactory;
 import Utilities.WebActions;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.List;
 
@@ -51,18 +48,15 @@ public class HomePage {
     }
 
     public void addItemFromBestsellersAndVerifyInCart() {
-        act.doClick(openAllCategoriesMenu);
+        act.doActionsClick(openAllCategoriesMenu);
         act.doClick(bestSellers);
-        act.checkElementIsDisplayed(bestSellersInBagsWalletsAndLuggage);
-        act.checkElementIsDisplayed(bestSellersNextPageButton);
-        act.doClick(bestSellersNextPageButton);
-        act.doActionsClick(bestSellersNextPageButton);
-        act.doActionsClick(eighthItemFromBagsBestSellers);
-        WebElement eighthItemFromBestSeller = DriverFactory.get().findElement(eighthItemTitle);
-        String selectedItemNameFromBestSellers = eighthItemFromBestSeller.getText().trim();
+        act.checkElementIsDisplayed(bagsWalletsAndLuggage);
+        act.doClick(bagsWalletsAndLuggage);
+        act.checkElementIsDisplayed(eighthItemFromBagsBestSellers);
+        WebElement eighthItemTitle = DriverFactory.get().findElement(eighthItemFromBagsBestSellers);
+        String selectedItemNameFromBestSellers = eighthItemTitle.getText().trim();
         System.out.println(selectedItemNameFromBestSellers);
-        eighthItemFromBestSeller.click();
-        act.checkElementIsDisplayed(eighthItemTitle);
+        eighthItemTitle.click();
         act.doClick(addItemToCartButton);
         try {
             if (act.checkElementIsDisplayed(skipButtonToSkipAddOnOrder)) {
@@ -72,7 +66,7 @@ public class HomePage {
             System.out.println("Skip button to skip an add-on order is not found");
         }
         Assert.assertTrue(act.checkElementIsDisplayed(addedToCartSuccessMessage));
-        act.doJSClick(shoppingCart);
+        act.doActionsClick(shoppingCart);
         String cartItemName = DriverFactory.get().findElement(cartItemsList).getText().trim();
         System.out.println(cartItemName);
         Assert.assertEquals(selectedItemNameFromBestSellers, cartItemName);
