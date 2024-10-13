@@ -1,6 +1,7 @@
 package Utilities;
 
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 
 public class ExtentFactory {
 
@@ -12,5 +13,14 @@ public class ExtentFactory {
 
     public static ExtentTest get() {
         return extent.get();
+    }
+
+    public static void log(Status s, String message) {
+        get().info(message);
+        if (s == Status.FAIL) {
+            LogHandler.error(message);
+        }
+        else
+            LogHandler.info(message);
     }
 }
