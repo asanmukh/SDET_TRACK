@@ -21,6 +21,11 @@ public class HomePage {
         this.act = new WebActions(driver);
     }
 
+    /**
+     * This method performs a search for a given product name on the HomePage,
+     * and validates that the expected product is displayed
+     * @param anyProductName the name of the product to search for
+     */
     public void searchProduct(String anyProductName) {
         act.checkElementIsDisplayed(searchButton);
         act.doEnterText(searchTextBox, anyProductName);
@@ -30,6 +35,11 @@ public class HomePage {
         act.doClick(searchSubmitButton);
     }
 
+    /**
+     * This method tests the search functionality by searching for a product name and then selecting the brand filter.
+     * It then verifies that all items displayed have the brand name in their title.
+     * @param samsung the name of the product to search for
+     */
     public void testSearchAndFilterFunctionality(String samsung) {
         act.checkElementIsDisplayed(searchTextBox);
         act.doEnterText(searchTextBox, samsung);
@@ -47,6 +57,11 @@ public class HomePage {
         }
     }
 
+    /**
+     * This method adds the eighth item from the bestseller page to the cart,
+     * and verifies that the item is added to the cart
+     * It also verifies that the item is deleted from the cart after clicking the deleted button
+     */
     public void addItemFromBestsellersAndVerifyInCart() {
         act.doActionsClick(openAllCategoriesMenu);
         act.doClick(bestSellers);

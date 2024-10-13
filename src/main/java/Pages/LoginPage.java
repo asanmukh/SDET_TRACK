@@ -23,11 +23,18 @@ public class LoginPage {
 
     public WebDriver driver;
     private final WebActions act;
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.act = new WebActions(driver);
     }
 
+    /**
+     * Perform login with the given username and password
+     *
+     * @param username the username to use when logging in
+     * @param password the password to use when logging in
+     */
     public void performLogin(String username, String password) {
         ExtentFactory.log(Status.INFO, "Performing login with username: " + username + " and password: " + password);
         act.doClick(accountList);
@@ -38,16 +45,31 @@ public class LoginPage {
         ExtentFactory.log(Status.PASS, "Login successful");
     }
 
+
+    /**
+     * Waits for the search box to be displayed
+     */
     public void waitForSearchBoxToBeDisplayed() {
         act.checkElementIsDisplayed(searchBox);
     }
 
+    /**
+     * Checks if the captcha element is present and visible on the page.
+     *
+     * @return true if the captcha element is present and visible, false otherwise
+     */
     public boolean isCaptchaPresent() {
         ExtentFactory.log(Status.INFO, "Checking if captcha is present");
         List<WebElement> captchaElements = act.getListOfWebElements(captchaImage);
         return !captchaElements.isEmpty() && act.checkElementIsDisplayed(captchaImage);
     }
 
+
+    /**
+     * Captures a screenshot of the entire screen and saves it as a PNG file to the working directory.
+     * If a file named "screenshot.png" already exists, it will be deleted.
+     * If there is an error capturing the screenshot or writing it to the file, an error message will be printed.
+     */
     public static void screenshot() {
         try {
             Robot robot = new Robot();
@@ -69,6 +91,12 @@ public class LoginPage {
         }
     }
 
+
+    /**
+     * Solve the captcha by using the Tesseracts OCR library to extract the text from the captcha image.
+     * The image is captured using the Selenium TakesScreenshot interface.
+     * The extracted text is then entered into the captcha input box, and the continued button is clicked.
+     */
     public void solveCaptcha() {
         System.out.println("Captcha found, solving...");
         LoginPage.screenshot();
@@ -78,6 +106,16 @@ public class LoginPage {
         act.doClick(captchaContinueButton);
     }
 
+
+    /**
+     * Test a valid login by performing a login with the provided username and password, and then check
+     * if the search box is displayed.
+     * If the search box is displayed, the login was successful, otherwise
+     * the login failed.
+     *
+     * @param username The username to use for the login.
+     * @param password The password to use for the login.
+     */
     public void testValidLogin(String username, String password) {
         try {
             performLogin(username, password);
@@ -95,10 +133,23 @@ public class LoginPage {
         }
     }
 
+    /**
+     * Checks if the search box is displayed.
+     *
+     * @return true if the search box is displayed, false otherwise.
+     */
     public boolean isSearchBoxDisplayed() {
         return act.checkElementIsDisplayed(searchBox);
     }
 
+    /**
+     * Solve the captcha by taking a screenshot of the captcha element and then
+     * using Tesseracts to OCR the image.
+     * The result is returned as a string.
+     *
+     * @param captchaScreenshot the screenshot of the captcha element.
+     * @return the text recognized by Tesseracts.
+     */
     public String solveCaptcha(File captchaScreenshot) {
         try {
             System.load("/opt/homebrew/lib/libtesseract.dylib");
@@ -115,6 +166,12 @@ public class LoginPage {
         }
     }
 
+    /**
+     * Tests a login with an invalid email address.
+     *
+     * @param username the invalid email address to use for the login.
+     *                 The test will fail if the authentication error message is not displayed.
+     */
     public void testInvalidEmailLogin(String username) {
         try {
             act.doClick(accountList);
@@ -130,6 +187,15 @@ public class LoginPage {
         }
     }
 
+
+    /**
+     * Tests a login with an invalid password.
+     *
+     * @param username the email address to use for the login.
+     * @param password the invalid password to use for the login.
+     *                 The test will fail if the authentication error message is not displayed.
+     *                 If a captcha is present, the test will attempt to solve the captcha.
+     */
     public void testInvalidPasswordLogin(String username, String password) {
         try {
             act.doClick(accountList);
@@ -149,6 +215,11 @@ public class LoginPage {
         }
     }
 
+    /**
+     * Determines if the authentication error message is displayed on the page.
+     *
+     * @return true if the authentication error message is displayed, false if not.
+     */
     private boolean isAuthenticationErrorMessageDisplayed() {
         try {
             return act.checkElementIsDisplayed(authenticationErrorMessage);
@@ -157,6 +228,10 @@ public class LoginPage {
         }
     }
 
+    /**
+     * Tests the logout functionality by verifying that the user is able to
+     * click on the logout button and then see the email input box.
+     */
     public void testLogOutFunctionality() {
         try {
             act.doMoveHoverToElement(accountList);

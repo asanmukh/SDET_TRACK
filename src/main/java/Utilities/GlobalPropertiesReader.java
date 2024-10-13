@@ -17,8 +17,14 @@ public class GlobalPropertiesReader {
         }
     }
 
+
+    /**
+     * Get the value of the specified property key from the global properties file.
+     *
+     * @param key the key of the property to retrieve
+     * @return the value of the specified property, or an empty string if the key is not found in the properties file
+     */
     public static String getPropertyValue(String key) {
-        String value = prop.getProperty(key,"");
-        return value;
+        return prop.getProperty(key, "");
     }
 }

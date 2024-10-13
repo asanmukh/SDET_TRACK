@@ -14,13 +14,19 @@ import static Locators.accountProfilePageLocators.*;
 
 public class AccountProfilePage {
 
-    public WebDriver driver;
     private final WebActions act;
+    public WebDriver driver;
+
     public AccountProfilePage(WebDriver driver) {
         this.driver = driver;
         this.act = new WebActions(driver);
     }
 
+    /**
+     * Adds a new address on the account profile page.
+     *
+     * @param chooseState The state name to be selected.
+     */
     public void addNewAddress(String chooseState) {
         act.doClick(accountList);
         act.checkElementIsDisplayed(manageAddresses);
@@ -34,21 +40,25 @@ public class AccountProfilePage {
         act.doEnterText(addressLine2, "near mallige idly factory ");
         act.doEnterText(landmark, "Near Apollo Hospital");
         act.doClick(state);
-        WebElement stateName = DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
-        act.doClick(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
+        WebElement stateName = DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link' and contains(text(),'" + chooseState + "')]"));
+        stateName.click();
+//        act.doClick(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
         act.doClick(changeFocus);
         act.doActionsClick(addAddressButton);
         act.checkElementIsDisplayed(addAddressSuccessMessage);
         Assert.assertTrue(act.checkElementIsDisplayed(verifyNewAddressFromYourAddress));
     }
 
+    /**
+     * Deletes the newly added address from the account profile page.
+     */
     public void deleteAddress() {
         act.checkElementIsDisplayed(deleteAddedAddress);
         act.doClick(deleteAddedAddress);
         act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        DriverFactory.get().findElement(deleteAddressModalConfirmYesButton).click();
+        act.doJSClick(deleteAddressModalConfirmYesButton);
         Assert.assertTrue(act.checkElementIsDisplayed(addressDeletedSuccessMessage));
     }
 }

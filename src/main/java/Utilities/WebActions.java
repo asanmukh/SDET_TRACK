@@ -24,6 +24,12 @@ public class WebActions {
         this.js = (JavascriptExecutor) driver;
     }
 
+    /**
+     * Clicks on the web element with the given locator.
+     * If the element is not clickable after {@link #maxRetryCount} attempts, a RuntimeException is thrown.
+     * @param locator the locator of the element to click.
+     * @throws RuntimeException if the element is not clickable after max retries.
+     */
     public void doClick(By locator) {
         int retryCount = 0;
         while (retryCount < maxRetryCount) {
@@ -49,6 +55,13 @@ public class WebActions {
         }
     }
 
+    /**
+     * Clicks on the web element with the given locator using JavaScript.
+     * If the element is not clickable after {@link #maxRetryCount} attempts, a RuntimeException is thrown.
+     * @param element the locator of the element to click.
+     * @param msg Optional message to log when attempting to click the element.
+     * @throws RuntimeException if the element is not clickable after max retries.
+     */
     public void doJSClick(By element, String... msg) {
         int retryCnt = 0;
         Exception ex = null;
@@ -70,6 +83,13 @@ public class WebActions {
         }
     }
 
+    /**
+     * Scrolls the webpage to the element with the given locator.
+     * If the element is not found after {@link #maxRetryCount} attempts, a RuntimeException is thrown.
+     * @param element the locator of the element to scroll to.
+     * @param msg Optional message to log when attempting to scroll to the element.
+     * @throws RuntimeException if the element is not clickable after max retries.
+     */
     public void scrollToElement(By element, String... msg) {
         int retryCnt = 0;
         Exception ex = null;
@@ -95,6 +115,13 @@ public class WebActions {
         }
     }
 
+    /**
+     * Performs a mouse hover and click on the web element with the given locator.
+     * If the element is not clickable after {@link #maxRetryCount} attempts, a RuntimeException is thrown.
+     * @param locator the locator of the element to perform mouse hover and click on.
+     * @param msg Optional message to log when attempting to perform mouse hover and click on the element.
+     * @throws RuntimeException if the element is not clickable after max retries.
+     */
     public void doActionsClick(By locator, String... msg) {
         int retryCnt = 0;
         Exception ex = null;
@@ -119,6 +146,13 @@ public class WebActions {
         }
     }
 
+    /**
+     * Enters the given text into the web element with the given locator.
+     * If the element is not present after {@link #maxRetryCount} attempts, a RuntimeException is thrown.
+     * @param locator the locator of the element to enter text into.
+     * @param text the text to enter into the element.
+     * @throws RuntimeException if the element is not present after max retries.
+     */
     public void doEnterText(By locator, String text) {
         int retryCount = 0;
         while (retryCount < maxRetryCount) {
@@ -132,11 +166,20 @@ public class WebActions {
         }
     }
 
+    /**
+     * Gets the base64 representation of the current screenshot.
+     * @return the base64 representation of the current screenshot.
+     */
     public String getBase64Screenshot() {
         ExtentFactory.log(Status.INFO, "Getting base64 screenshot");
         return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
     }
 
+    /**
+     * Checks if the element with the given locator is displayed.
+     * @param locator the locator of the element to check.
+     * @return true if the element is displayed, false otherwise.
+     */
     public boolean checkElementIsDisplayed(By locator) {
         try {
             ExtentFactory.log(Status.INFO, "Checking if element is displayed with locator: " + locator);
@@ -148,6 +191,13 @@ public class WebActions {
         }
     }
 
+    /**
+     * Gets the list of web elements with the given locator.
+     * If the elements are not present after {@link #maxRetryCount} attempts, an empty list is returned.
+     * @param locator the locator of the elements to fetch.
+     * @param msg Optional message to log when attempting to fetch the elements.
+     * @return the list of web elements with the given locator.
+     */
     public List<WebElement> getListOfWebElements(By locator, String... msg) {
         List<WebElement> elements = new ArrayList<>();
         int retryCnt = 0;
@@ -176,22 +226,37 @@ public class WebActions {
         return elements;
     }
 
+    /**
+     * Gets the title of the currently active page.
+     * @return the title of the currently active page.
+     */
     public String getTitle() {
         ExtentFactory.log(Status.INFO, "Getting title");
         return driver.getTitle();
     }
 
+    /**
+     * Performs a mouse hover over the web element with the given locator.
+     * @param element the locator of the element to perform mouse hover on.
+     */
     public void doMoveHoverToElement(By element) {
         ExtentFactory.log(Status.INFO, "Performing mouse hover and click on web element with locator: " + element);
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(element)).perform();
     }
 
+    /**
+     * Refreshes the currently active page.
+     */
     public void refreshPage() {
         ExtentFactory.log(Status.INFO, "Refreshing the page");
         driver.navigate().refresh();
     }
 
+    /**
+     * Waits for the given web element to become invisible.
+     * @param element the web element to wait for.
+     */
     public void waitForElementToBeInvisible(WebElement element) {
         try {
             ExtentFactory.log(Status.INFO, "Waiting for element to be invisible");

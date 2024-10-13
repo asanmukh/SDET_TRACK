@@ -16,17 +16,26 @@ public class ShoppingCartPage {
 
     public WebDriver driver;
     private final WebActions act;
-
     public ShoppingCartPage(WebDriver driver) {
         this.driver = driver;
         this.act = new WebActions(driver);
     }
 
+
+    /**
+     * Clicks on the "Shopping Cart" button in the top navigation bar.
+     */
     public void clickOnShoppingCart() {
         act.checkElementIsDisplayed(shoppingCart);
         act.doClick(shoppingCart);
     }
 
+    /**
+     * Verifies that the three electronics products added in the test scenario are present in the shopping cart.
+     * @param electronicsProduct1Name the name of the first electronics product
+     * @param electronicsProduct2Name the name of the second electronics product
+     * @param electronicsProduct3Name the name of the third electronics product
+     */
     public void verifyItemsInCart(String electronicsProduct1Name, String electronicsProduct2Name, String electronicsProduct3Name) {
         act.refreshPage();
         List<WebElement> cartItems = act.getListOfWebElements(cartItemsList);
@@ -50,6 +59,9 @@ public class ShoppingCartPage {
         }
     }
 
+    /**
+     * Deletes all items added to the cart.
+     */
     public void deleteAddedItemsFromCart() {
         act.refreshPage();
         List<WebElement> cartItems = act.getListOfWebElements(cartItemsList);
@@ -57,9 +69,9 @@ public class ShoppingCartPage {
         for (int i = 0; i < cartItems.size(); i++) {
             try {
                 WebElement deleteButton = driver.findElement(By.xpath("(//*[@data-feature-id='delete']/span/input[@data-action='delete'])[" + (i + 1) + "]"));
-                Thread.sleep(3000);
+                Thread.sleep(Duration.ofMillis(3000));
                 deleteButton.click();
-                Thread.sleep(3000);
+                Thread.sleep(Duration.ofMillis(3000));
             } catch (Exception e) {
                 System.out.println("Error clicking on delete button: " + e.getMessage());
             }
