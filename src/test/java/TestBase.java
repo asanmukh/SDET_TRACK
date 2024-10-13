@@ -29,6 +29,14 @@ public class TestBase {
     public ExtentReports extentReports;
     public ExtentSparkReporter extentSparkReporter;
 
+    /**
+     * Initializes the ExtentReports object and its associated
+     * {@link ExtentSparkReporter} object.
+     * Attaches the reporter to the
+     * ExtentReports object and sets various configuration options.
+     * This method is annotated with {@link BeforeSuite} and runs once
+     * for the entire test suite.
+     */
     @BeforeSuite
     public void generationOfReports() {
         extentReports = new ExtentReports();
@@ -42,6 +50,16 @@ public class TestBase {
         extentReports.setSystemInfo("Image", "Enabled");
     }
 
+
+    /**
+     * Initializes the test environment by creating a new {@link WebDriver} instance
+     * according to the browser name specified in the {@code global.properties} file.
+     * The browser instance is configured to run in headless mode if the value of
+     * the {@code headless} property is {@code yes}.
+     * The instance is then stored in
+     * the {@link DriverFactory} for use by the test methods.
+     * @param m the {@link Method} that is being invoked
+     */
     @BeforeMethod
     public void setUp(Method m) {
         ExtentFactory.set(extentReports.createTest(m.getName()));
@@ -86,6 +104,10 @@ public class TestBase {
             DriverFactory.get().get(GlobalPropertiesReader.getPropertyValue("url"));
     }
 
+    /**
+     * If the test fails, get a screenshot and log it to the report.
+     * @param result The test result.
+     */
     @AfterMethod
     public void tearDown(ITestResult result) {
        if (!result.isSuccess()) {
@@ -96,6 +118,10 @@ public class TestBase {
 //       DriverFactory.get().quit();
     }
 
+    /**
+     * Closes the Extent report, flushing all data to the file specified when the
+     * report was created.
+     */
     @AfterSuite
     public void closeReports() {
         extentReports.flush();
