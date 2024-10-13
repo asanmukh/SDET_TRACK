@@ -9,14 +9,14 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static java.rmi.server.LogStream.log;
+
 
 public class WebActions {
 
     private final WebDriverWait wait;
     private final WebDriver driver;
     private final int maxRetryCount = 3;
-    private JavascriptExecutor js;
+    private final JavascriptExecutor js;
 
     public WebActions(WebDriver driver) {
         this.driver = driver;
@@ -35,10 +35,10 @@ public class WebActions {
                         element.click();
                         break;
                     } else {
-                        throw new ElementNotInteractableException("Element is not visible or interactable");
+                        throw new ElementNotInteractableException("Element is not visible or intractable");
                     }
                 } else {
-                    throw new ElementNotInteractableException("Element is not visible or interactable");
+                    throw new ElementNotInteractableException("Element is not visible or intractable");
                 }
             } catch (Exception e) {
                 retryCount++;
@@ -53,7 +53,7 @@ public class WebActions {
         int retryCnt = 0;
         Exception ex = null;
         if (msg.length > 0)
-            System.out.println(log(msg[0]));
+            ExtentFactory.log(Status.INFO, msg[0]);
         while (true) {
             if (retryCnt > maxRetryCount)
                 throw new RuntimeException("Unable to click the element with locator: " + element, ex);
@@ -74,7 +74,7 @@ public class WebActions {
         int retryCnt = 0;
         Exception ex = null;
         if (msg.length > 0)
-            System.out.println(log(msg[0]));
+            ExtentFactory.log(Status.INFO, msg[0]);
         while (true) {
             if (retryCnt > maxRetryCount)
                 throw new RuntimeException("Unable to scroll the webpage to element with locator: " + element, ex);
@@ -99,7 +99,7 @@ public class WebActions {
         int retryCnt = 0;
         Exception ex = null;
         if (msg.length > 0)
-            System.out.println(log(msg[0]));
+            ExtentFactory.log(Status.INFO, msg[0]);
         Actions acts = new Actions(driver);
         while (true) {
             if (retryCnt > maxRetryCount)
