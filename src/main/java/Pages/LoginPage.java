@@ -1,7 +1,9 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.ExtentFactory;
 import Utilities.WebActions;
+import com.aventstack.extentreports.Status;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import org.openqa.selenium.*;
@@ -14,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static Locators.HomePageLocators.*;
+import static Locators.HomePageLocators.searchBox;
 import static Locators.LoginPageLocators.*;
 
 public class LoginPage {
@@ -27,11 +29,13 @@ public class LoginPage {
     }
 
     public void performLogin(String username, String password) {
+        ExtentFactory.log(Status.INFO, "Performing login with username: " + username + " and password: " + password);
         act.doClick(accountList);
         act.doEnterText(email, username);
         act.doClick(continueButton);
         act.doEnterText(passwordLocator, password);
         act.doClick(signInButton);
+        ExtentFactory.log(Status.PASS, "Login successful");
     }
 
     public void waitForSearchBoxToBeDisplayed() {
@@ -39,6 +43,7 @@ public class LoginPage {
     }
 
     public boolean isCaptchaPresent() {
+        ExtentFactory.log(Status.INFO, "Checking if captcha is present");
         List<WebElement> captchaElements = act.getListOfWebElements(captchaImage);
         return !captchaElements.isEmpty() && act.checkElementIsDisplayed(captchaImage);
     }

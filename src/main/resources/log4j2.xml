@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="MyApp">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>
+        </Console>
+<!--        <File name="MyFile" fileName="logs/app-file.log" append="false">-->
+<!--            <PatternLayout>-->
+<!--            <pattern>%d %p %c{1.} [%t] %m%n</pattern>-->
+<!--            </PatternLayout>-->
+<!--        </File>-->
+        <RollingFile name="RollingFile" fileName="logs/app.log"
+                     filePattern="logs/$${date:yyyy-MM-dd}/app-%d{yyyy-MM-dd}.log-%i.log.gz">
+            <PatternLayout>
+            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <policies>
+                    <OnstartUpTriggeringPolicy/>
+            </policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
