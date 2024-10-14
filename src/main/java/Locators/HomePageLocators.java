@@ -15,8 +15,11 @@ public interface HomePageLocators {
     By eighthItemFromBagsBestSellers = By.xpath("//*[text()='Bestsellers in Bags, Wallets and Luggage']/parent::div/parent::div//div[@id='gridItemRoot']/div[@id='p13n-asin-index-7']/div//div/a/span/div");
     By eighthItemTitle = By.xpath("//*[@id='productTitle' and contains(text(),'American Tourister Liftoff')]");
     By addItemToCartButton = By.xpath("//*[@title='Add to Shopping Cart']");
+    By bestSellerrsCartButton = By.xpath("//*[@id='add-to-cart-button']");
     By skipButtonToSkipAddOnOrder = By.xpath("//*[@id='attachSiNoCoverage-announce']");
-    By addedToCartSuccessMessage = By.xpath("//*[@class='a-size-medium-plus a-color-base sw-atc-text a-text-bold' and contains(text(),'Added to Cart')]");
+    By addedToCartSuccessMessage = By.xpath("//*[@id='NATC_SMART_WAGON_CONF_MSG_SUCCESS']");
     By bagsWalletsAndLuggage =By.xpath("//*[text()='Bags, Wallets and Luggage']");
+
+    By goToCartButton = By.xpath("(//*[@class='a-button-text'])[5]");
 }
 

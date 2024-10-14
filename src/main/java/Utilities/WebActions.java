@@ -74,7 +74,7 @@ public class WebActions {
                 ExtentFactory.log(Status.INFO, "Clicking on the element with locator: " + element);
                 wait.until(ExpectedConditions.elementToBeClickable(element));
                 js.executeScript("arguments[0].click();", driver.findElement(element));
-                System.out.println("Clicked on the element with locator: " + element);
+                LogHandler.info("Clicked on the element with locator: " + element);
                 break;
             } catch (Exception e) {
                 ex = e;
@@ -104,7 +104,7 @@ public class WebActions {
                 js.executeScript(
                         "arguments[0].scrollIntoView({behavior: \"smooth\", block: \"end\", inline: \"nearest\"})",
                         driver.findElement(element));
-                System.out.println("Successfully scrolled the webpage to element with locator: " + element);
+                LogHandler.info("Successfully scrolled the webpage to element with locator: " + element);
                 break;
             } catch (NoSuchElementException e) {
                 ex = e;
@@ -203,7 +203,7 @@ public class WebActions {
         int retryCnt = 0;
         Exception ex = null;
         if (msg.length > 0)
-            System.out.println(msg[0]);
+            LogHandler.info(msg[0]);
         while (true) {
             try {
                 if (retryCnt > maxRetryCount) {
@@ -216,7 +216,7 @@ public class WebActions {
                 ExtentFactory.log(Status.INFO, "Fetching list of web elements with locator: " + locator);
                 wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
                 elements = driver.findElements(locator);
-                System.out.println("Successfully found web elements: " + locator);
+                LogHandler.info("Successfully found web elements: " + locator);
                 break;
             } catch (Exception e) {
                 ex = e;
@@ -263,7 +263,7 @@ public class WebActions {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             wait.until(ExpectedConditions.invisibilityOf(element));
         } catch (TimeoutException e) {
-            System.out.println("Element is still visible after waiting for 10 seconds");
+            LogHandler.info("Element is still visible after waiting for 10 seconds");
         }
     }
 }

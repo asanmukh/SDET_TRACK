@@ -17,8 +17,8 @@ public interface accountProfilePageLocators {
     By addAddressButton = By.xpath("//*[text()='Add address']");
     By addAddressSuccessMessage = By.xpath("//*[text()='Address saved']");
     By verifyNewAddressFromYourAddress = By.xpath("(//*[@id='address-ui-widgets-FullName' and contains(text(),'Akash Test')])[1]");
-    By deleteAddedAddress = By.xpath("//*[text()=('Akash Test')]/parent::span/parent::li/parent::ul/parent::div/parent::div/parent::div/parent::div/following-sibling::div/span/a[@id='ya-myab-address-delete-btn-3']");
-    By deleteAddressModalConfirmYesButton = By.xpath("//*[@id='deleteAddressModal-3-submit-btn-announce']");
+    By deleteAddedAddress = By.xpath("//*[text()=('Akash Test')]/parent::span/parent::li/parent::ul/parent::div/parent::div/parent::div/parent::div/following-sibling::div/span/a[@id='ya-myab-address-delete-btn-2']");
+    By deleteAddressModalConfirmYesButton = By.xpath("//*[@id='deleteAddressModal-2-submit-btn']//input[@type='submit']");
     By addressDeletedSuccessMessage = By.xpath("//*[text()='Address deleted']");
     By changeFocus = By.xpath("//*[text()='Add a new address']");
 

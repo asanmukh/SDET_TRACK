@@ -2,6 +2,7 @@ package Pages;
 
 import Utilities.DriverFactory;
 import Utilities.ExtentFactory;
+import Utilities.LogHandler;
 import Utilities.WebActions;
 import com.aventstack.extentreports.Status;
 import net.sourceforge.tess4j.ITesseract;
@@ -77,17 +78,17 @@ public class LoginPage {
             BufferedImage screenshot = robot.createScreenCapture(screenRect);
             File file = new File("screenshot.png");
             if (file.exists()) {
-                System.out.println("File already exists, deleting it...");
+                LogHandler.info("File already exists, deleting it...");
                 if (!file.delete()) {
-                    System.out.println("Error deleting file: " + file.getName());
+                    LogHandler.info("Error deleting file: " + file.getName());
                 }
             }
             ImageIO.write(screenshot, "png", file);
         } catch (AWTException e) {
-            System.out.println("Error creating robot: " + e.getMessage());
+            LogHandler.info("Error creating robot: " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("Error writing screenshot to file: " + e.getMessage());
-            System.out.println("Unable to write screenshot to file. Please check file permissions.");
+            LogHandler.info("Error writing screenshot to file: " + e.getMessage());
+            LogHandler.info("Unable to write screenshot to file. Please check file permissions.");
         }
     }
 
@@ -98,7 +99,7 @@ public class LoginPage {
      * The extracted text is then entered into the captcha input box, and the continued button is clicked.
      */
     public void solveCaptcha() {
-        System.out.println("Captcha found, solving...");
+        LogHandler.info("Captcha found, solving...");
         LoginPage.screenshot();
         File captchaScreenshot = ((TakesScreenshot) DriverFactory.get()).getScreenshotAs(OutputType.FILE);
         String captchaText = solveCaptcha(captchaScreenshot);
@@ -124,9 +125,9 @@ public class LoginPage {
             }
             waitForSearchBoxToBeDisplayed();
             if (isSearchBoxDisplayed()) {
-                System.out.println("Login successful, search box is displayed.");
+                LogHandler.info("Login successful, search box is displayed.");
             } else {
-                System.out.println("Login failed, search box is not displayed.");
+                LogHandler.info("Login failed, search box is not displayed.");
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to login", e);
@@ -153,14 +154,14 @@ public class LoginPage {
     public String solveCaptcha(File captchaScreenshot) {
         try {
             System.load("/opt/homebrew/lib/libtesseract.dylib");
-            System.out.println(System.getProperty("java.library.path"));
+            LogHandler.info(System.getProperty("java.library.path"));
             System.setProperty("java.library.path", "/usr/local/bin/tesseract");
             ITesseract tesseract = new Tesseract();
             tesseract.setDatapath("/opt/homebrew/opt/tesseract/share/tessdata");
             tesseract.setLanguage("eng");
             return tesseract.doOCR(captchaScreenshot);
         } catch (Exception e) {
-            System.out.println("Error message: " + e.getMessage());
+            LogHandler.info("Error message: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Failed to solve captcha", e);
         }
@@ -178,7 +179,7 @@ public class LoginPage {
             act.doEnterText(email, username);
             act.doClick(continueButton);
             if (isAuthenticationErrorMessageDisplayed()) {
-                System.out.println("Authentication error message is displayed");
+                LogHandler.info("Authentication error message is displayed");
             } else {
                 throw new RuntimeException("User is not able to see the error message");
             }
@@ -204,7 +205,7 @@ public class LoginPage {
             act.doEnterText(passwordLocator, password);
             act.doClick(signInButton);
             if (isAuthenticationErrorMessageDisplayed()) {
-                System.out.println("Authentication error message is displayed");
+                LogHandler.info("Authentication error message is displayed");
             } else if (isCaptchaPresent()) {
                 solveCaptcha();
             } else {
