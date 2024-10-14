@@ -1,11 +1,14 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.LogHandler;
 import Utilities.WebActions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
@@ -43,7 +46,7 @@ public class ShoppingCartPage {
         String[] expectedTexts = {electronicsProduct1Name, electronicsProduct2Name, electronicsProduct3Name};
         boolean[] found = new boolean[expectedTexts.length];
         for (WebElement item : cartItems) {
-            System.out.println(item.getText());
+            LogHandler.info(item.getText());
             for (int i = 0; i < expectedTexts.length; i++) {
                 if (item.getText().contains(expectedTexts[i])) {
                     found[i] = true;
@@ -53,9 +56,9 @@ public class ShoppingCartPage {
         Assert.assertTrue("Electronic Item 1 not found in cart", found[0]);
         Assert.assertTrue("Electronic 2 not found in cart", found[1]);
         Assert.assertTrue("Electronic 3 not found in cart", found[2]);
-        System.out.println("Asserted items:");
+        LogHandler.info("Asserted items:");
         for (int i = 0; i < expectedTexts.length; i++) {
-            System.out.println((i + 1) + ". " + expectedTexts[i]);
+            LogHandler.info((i + 1) + ". " + expectedTexts[i]);
         }
     }
 
@@ -69,13 +72,16 @@ public class ShoppingCartPage {
         for (int i = 0; i < cartItems.size(); i++) {
             try {
                 WebElement deleteButton = driver.findElement(By.xpath("(//*[@data-feature-id='delete']/span/input[@data-action='delete'])[" + (i + 1) + "]"));
-                Thread.sleep(Duration.ofMillis(3000));
+                LogHandler.info("Clicking on delete button for item " + (i + 1));
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+                wait.until(ExpectedConditions.elementToBeClickable(deleteButton));
                 deleteButton.click();
-                Thread.sleep(Duration.ofMillis(3000));
+                LogHandler.info("Delete button clicked for item " + (i + 1));
             } catch (Exception e) {
-                System.out.println("Error clicking on delete button: " + e.getMessage());
+                LogHandler.info("Error clicking on delete button: " + e.getMessage());
             }
         }
+        LogHandler.info("Waiting for cart items to be deleted...");
         act.refreshPage();
         List<WebElement> cartItemsAfterDeletion = act.getListOfWebElements(cartItemsList);
         Assert.assertTrue("Cart is not empty after deletion", cartItemsAfterDeletion.isEmpty());

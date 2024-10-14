@@ -1,6 +1,7 @@
 package Pages;
 
 import Utilities.DriverFactory;
+import Utilities.LogHandler;
 import Utilities.WebActions;
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -49,10 +50,10 @@ public class HomePage {
         WebElement brandFilter = DriverFactory.get().findElement(filterBySamsungCheckbox);
         brandFilter.click();
         List<WebElement> itemTitles = act.getListOfWebElements(itemsDisplayedAfterBrandFilter);
-        System.out.println("Number of item titles listed after brand filter is selected to Samsung: " + itemTitles.size());
+        LogHandler.info("Number of item titles listed after brand filter is selected to Samsung: " + itemTitles.size());
         for (WebElement title : itemTitles) {
             String itemTitle = title.getText().toLowerCase();
-            System.out.println("Item title: " + itemTitle);
+            LogHandler.info("Item title: " + itemTitle);
             Assert.assertTrue("Item title does not contain 'samsung': " + itemTitle, itemTitle.contains("samsung"));
         }
     }
@@ -64,29 +65,30 @@ public class HomePage {
      */
     public void addItemFromBestsellersAndVerifyInCart() {
         act.doActionsClick(openAllCategoriesMenu);
-        act.doClick(bestSellers);
+        act.doActionsClick(bestSellers);
         act.checkElementIsDisplayed(bagsWalletsAndLuggage);
-        act.doClick(bagsWalletsAndLuggage);
+        act.doActionsClick(bagsWalletsAndLuggage);
         act.checkElementIsDisplayed(eighthItemFromBagsBestSellers);
         WebElement eighthItemTitle = DriverFactory.get().findElement(eighthItemFromBagsBestSellers);
         String selectedItemNameFromBestSellers = eighthItemTitle.getText().trim();
-        System.out.println(selectedItemNameFromBestSellers);
+        LogHandler.info(selectedItemNameFromBestSellers);
         eighthItemTitle.click();
-        act.doClick(addItemToCartButton);
+        act.doActionsClick(bestSellerrsCartButton);
         try {
             if (act.checkElementIsDisplayed(skipButtonToSkipAddOnOrder)) {
                 act.doActionsClick(skipButtonToSkipAddOnOrder);
             }
         } catch (NoSuchElementException e) {
-            System.out.println("Skip button to skip an add-on order is not found");
+            LogHandler.info("Skip button to skip an add-on order is not found");
         }
         Assert.assertTrue(act.checkElementIsDisplayed(addedToCartSuccessMessage));
+        act.doClick(goToCartButton);
         act.doActionsClick(shoppingCart);
         String cartItemName = DriverFactory.get().findElement(cartItemsList).getText().trim();
-        System.out.println(cartItemName);
+        LogHandler.info(cartItemName);
         Assert.assertEquals(selectedItemNameFromBestSellers, cartItemName);
         act.doClick(deleteItemFromCart);
-        act.doActionsClick(deleteItemFromCart);
+//        act.doActionsClick(deleteItemFromCart);
         Assert.assertTrue(act.checkElementIsDisplayed(itemDeletedSuccessMessage));
     }
 }

@@ -4,6 +4,7 @@ import Utilities.DriverFactory;
 import Utilities.WebActions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -40,9 +41,8 @@ public class AccountProfilePage {
         act.doEnterText(addressLine2, "near mallige idly factory ");
         act.doEnterText(landmark, "Near Apollo Hospital");
         act.doClick(state);
-        WebElement stateName = DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link' and contains(text(),'" + chooseState + "')]"));
+        WebElement stateName = DriverFactory.get().findElement(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
         stateName.click();
-//        act.doClick(By.xpath("//*[@class='a-dropdown-link a-active' and contains(text(),'" + chooseState + "')]"));
         act.doClick(changeFocus);
         act.doActionsClick(addAddressButton);
         act.checkElementIsDisplayed(addAddressSuccessMessage);
@@ -58,7 +58,7 @@ public class AccountProfilePage {
         act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        act.doJSClick(deleteAddressModalConfirmYesButton);
+        act.doActionsClick(deleteAddressModalConfirmYesButton);
         Assert.assertTrue(act.checkElementIsDisplayed(addressDeletedSuccessMessage));
     }
 }
