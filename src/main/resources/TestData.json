@@ -1,0 +1,20 @@
+{
+  "loginPage": {
+    "username": "akashms4all@gmail.com",
+    "password": "Aki@1717"
+  },
+  "homePage": {
+    "searchProduct1": "Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)",
+    "searchProduct2": "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)",
+    "searchProduct3": "Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital",
+    "searchProduct4": "Samsung"
+  },
+  "accountProfilePage": {
+    "state": "KARNATAKA"
+  },
+  "electronicsPage": {
+    "electronicAddToCartItem1": "Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)",
+    "electronicAddToCartItem2": "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)",
+    "electronicAddToCartItem3": "Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital"
+  }
+}

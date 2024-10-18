@@ -115,7 +115,7 @@ public class TestBase {
            ExtentFactory.get().fail(result.getThrowable());
            ExtentFactory.get().fail("screenshot", MediaEntityBuilder.createScreenCaptureFromBase64String(base64Screenshot).build());
        }
-//       DriverFactory.get().quit();
+       DriverFactory.get().quit();
     }
 
     /**
@@ -126,6 +126,4 @@ public class TestBase {
     public void closeReports() {
         extentReports.flush();
     }
-
-
 }

@@ -134,7 +134,7 @@ public class WebActions {
             try {
                 ExtentFactory.log(Status.INFO, "Performing mouse hover and click on web element with locator: " + locator);
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
                 acts.moveToElement(element).click().build().perform();
                 break;
             } catch (StaleElementReferenceException e) {

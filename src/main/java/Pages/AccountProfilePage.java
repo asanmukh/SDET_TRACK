@@ -4,13 +4,12 @@ import Utilities.DriverFactory;
 import Utilities.WebActions;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 
-import static Locators.LoginPageLocators.*;
+import static Locators.LoginPageLocators.accountList;
 import static Locators.accountProfilePageLocators.*;
 
 public class AccountProfilePage {
@@ -55,7 +54,6 @@ public class AccountProfilePage {
     public void deleteAddress() {
         act.checkElementIsDisplayed(deleteAddedAddress);
         act.doClick(deleteAddedAddress);
-        act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         act.checkElementIsDisplayed(deleteAddressModalConfirmYesButton);
         DriverFactory.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         act.doActionsClick(deleteAddressModalConfirmYesButton);

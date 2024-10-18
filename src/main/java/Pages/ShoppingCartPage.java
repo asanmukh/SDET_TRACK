@@ -83,6 +83,7 @@ public class ShoppingCartPage {
         }
         LogHandler.info("Waiting for cart items to be deleted...");
         act.refreshPage();
+        act.checkElementIsDisplayed(By.xpath("//*[@class='a-size-extra-large a-spacing-mini a-spacing-top-base a-text-normal']"));
         List<WebElement> cartItemsAfterDeletion = act.getListOfWebElements(cartItemsList);
         Assert.assertTrue("Cart is not empty after deletion", cartItemsAfterDeletion.isEmpty());
     }
