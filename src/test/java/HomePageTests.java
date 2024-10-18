@@ -1,5 +1,6 @@
 import Pages.*;
 import Utilities.DriverFactory;
+import Utilities.JsonDataReader;
 import org.testng.annotations.Test;
 
 public class HomePageTests extends TestBase {
@@ -18,27 +19,39 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void testScenario1() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
+        String searchProduct1 = JsonDataReader.getTestData("homePage","searchProduct1");
+        String searchProduct2 = JsonDataReader.getTestData("homePage","searchProduct2");
+        String searchProduct3 = JsonDataReader.getTestData("homePage","searchProduct3");
+        String searchProduct4 = JsonDataReader.getTestData("homePage","searchProduct4");
+        String electronicsItem1 = JsonDataReader.getTestData("electronicsPage","electronicAddToCartItem1");
+        String electronicsItem2 = JsonDataReader.getTestData("electronicsPage","electronicAddToCartItem2");
+        String electronicsItem3 = JsonDataReader.getTestData("electronicsPage","electronicAddToCartItem3");
+        String state = JsonDataReader.getTestData("accountProfilePage", "state");
+
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         HomePage homePage = new HomePage(DriverFactory.get());
         ElectronicsPage electronicsPage = new ElectronicsPage(DriverFactory.get());
         electronicsPage.clickOnElectronics();
-        homePage.searchProduct("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
-        electronicsPage.addItemToCart("Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
+        homePage.searchProduct(searchProduct1);
+        electronicsPage.addItemToCart(electronicsItem1);
         electronicsPage.clickOnMobilesAndAccessories();
-        homePage.searchProduct("Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)");
-        electronicsPage.addItemToCart("Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)");
+        homePage.searchProduct(searchProduct2);
+        electronicsPage.addItemToCart(electronicsItem2);
         electronicsPage.clickOnCameras();
-        homePage.searchProduct("Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital");
-        electronicsPage.addItemToCart("Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital");
+        homePage.searchProduct(searchProduct3);
+        electronicsPage.addItemToCart(electronicsItem3);
         ShoppingCartPage shoppingCartPage = new ShoppingCartPage(DriverFactory.get());
         shoppingCartPage.clickOnShoppingCart();
-        shoppingCartPage.verifyItemsInCart("Gopro Hero12 Black - Waterproof Action Camera With 5.3K60 Ultra Hd Video, 27Mp Photos, Hdr, 1/1.9\" Image Sensor, Live Streaming, Webcam, Stabilization - Digital", "Samsung Galaxy S20 FE 5G (Cloud Navy, 8GB RAM, 128GB Storage)", "Sony 139 cm (55 inches) BRAVIA 2 4K Ultra HD Smart LED Google TV K-55S25 (Black)");
-        homePage.testSearchAndFilterFunctionality("Samsung");
+        shoppingCartPage.verifyItemsInCart(searchProduct3, searchProduct2, searchProduct1);
+        homePage.testSearchAndFilterFunctionality(searchProduct4);
         AccountProfilePage accountProfilePage = new AccountProfilePage(DriverFactory.get());
-        accountProfilePage.addNewAddress("KARNATAKA");
-        accountProfilePage.deleteAddress();
-        shoppingCartPage.deleteAddedItemsFromCart();
+        accountProfilePage.addNewAddress(state);
+        loginPage.testLogOutFunctionality();
+//        accountProfilePage.deleteAddress();
+//        shoppingCartPage.deleteAddedItemsFromCart();
     }
 
     /**
@@ -50,13 +63,12 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void testScenario2() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         HomePage homePage = new HomePage(DriverFactory.get());
-        homePage.testSearchAndFilterFunctionality("Samsung");
-        ShoppingCartPage shoppingCartPage = new ShoppingCartPage(DriverFactory.get());
-        shoppingCartPage.clickOnShoppingCart();
-        shoppingCartPage.deleteAddedItemsFromCart();
+        homePage.addItemFromBestsellersAndVerifyInCart();
     }
 
     /**
@@ -68,14 +80,18 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void testSearchFunctionality() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
+        String searchProduct4 = JsonDataReader.getTestData("homePage","searchProduct4");
+        String state = JsonDataReader.getTestData("accountProfilePage", "state");
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         ElectronicsPage electronicsPage = new ElectronicsPage(DriverFactory.get());
         electronicsPage.clickOnElectronics();
         HomePage homePage = new HomePage(DriverFactory.get());
-        homePage.testSearchAndFilterFunctionality("Samsung");
+        homePage.testSearchAndFilterFunctionality(searchProduct4);
         AccountProfilePage accountProfilePage = new AccountProfilePage(DriverFactory.get());
-        accountProfilePage.addNewAddress("KARNATAKA");
+        accountProfilePage.addNewAddress(state);
         accountProfilePage.deleteAddress();
     }
 
@@ -85,8 +101,10 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void testLogoutFunctionality() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         loginPage.testLogOutFunctionality();
     }
 
@@ -99,8 +117,10 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void testAddItemFromBestSellersSectionToCart() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         HomePage homePage = new HomePage(DriverFactory.get());
         homePage.addItemFromBestsellersAndVerifyInCart();
     }
@@ -112,10 +132,24 @@ public class HomePageTests extends TestBase {
      */
     @Test
     public void deleteItemFromCart() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
         LoginPage loginPage = new LoginPage(DriverFactory.get());
-        loginPage.testValidLogin("akashms4all@gmail.com", "Aki@1717");
+        loginPage.testValidLogin(username,password);
         ShoppingCartPage shoppingCartPage = new ShoppingCartPage(DriverFactory.get());
         shoppingCartPage.clickOnShoppingCart();
         shoppingCartPage.deleteAddedItemsFromCart();
+    }
+
+    @Test
+    public void deleteAddress() {
+        String username = JsonDataReader.getTestData("loginPage", "username");
+        String password = JsonDataReader.getTestData("loginPage", "password");
+        String state = JsonDataReader.getTestData("accountProfilePage", "state");
+        LoginPage loginPage = new LoginPage(DriverFactory.get());
+        loginPage.testValidLogin(username,password);
+        AccountProfilePage accountProfilePage = new AccountProfilePage(DriverFactory.get());
+        accountProfilePage.addNewAddress(state);
+        accountProfilePage.deleteAddress();
     }
 }
